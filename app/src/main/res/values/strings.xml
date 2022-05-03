@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">SoftInputEvent</string>
+    <string name="hello_blank_fragment">Submit</string>
+</resources>
