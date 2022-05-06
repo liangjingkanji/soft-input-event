@@ -1,6 +1,8 @@
 package com.drake.softinput
 
 import android.app.Activity
+import android.content.Context
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -17,12 +19,24 @@ fun EditText.showSoftInput() {
     isFocusable = true
     isFocusableInTouchMode = true
     requestFocus()
-    ViewCompat.getWindowInsetsController(this)?.show(WindowInsetsCompat.Type.ime())
+    if (isSystemInsetsAnimationSupport()) {
+        ViewCompat.getWindowInsetsController(this)?.show(WindowInsetsCompat.Type.ime())
+    } else {
+        postDelayed({
+            val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.showSoftInput(this, 0)
+        }, 300)
+    }
 }
 
 /** 隐藏软键盘 */
 fun Activity.hideSoftInput() {
-    ViewCompat.getWindowInsetsController(window.decorView)?.hide(WindowInsetsCompat.Type.ime())
+    currentFocus?.let {
+        val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(it.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+    } ?: let {
+        ViewCompat.getWindowInsetsController(window.decorView)?.hide(WindowInsetsCompat.Type.ime())
+    }
 }
 
 /** 隐藏软键盘 */
