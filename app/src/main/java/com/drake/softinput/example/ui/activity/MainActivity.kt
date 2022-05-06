@@ -9,8 +9,8 @@ import com.drake.brv.utils.setup
 import com.drake.softinput.example.R
 import com.drake.softinput.example.base.BaseMenuActivity
 import com.drake.softinput.example.databinding.ActivityMainBinding
+import com.drake.softinput.example.model.ChatMessage
 import com.drake.softinput.example.model.ChatModel
-import com.drake.softinput.example.model.Message
 import com.drake.softinput.hasSoftInput
 import com.drake.softinput.hideSoftInput
 import com.drake.softinput.setWindowSoftInput
@@ -34,7 +34,7 @@ class MainActivity : BaseMenuActivity<ActivityMainBinding>(R.layout.activity_mai
 
         // Use BRV to setup the recycler view : https://github.com/liangjingkanji/BRV/
         binding.rv.setup {
-            addType<Message> {
+            addType<ChatMessage> {
                 if (isMine()) {
                     R.layout.item_msg_right
                 } else {

@@ -17,18 +17,18 @@ class ChatModel : BaseObservable() {
     }
 
     /** 当前输入的消息数据类 */
-    fun getMessage(): List<Message> {
-        val messages = listOf(Message(input, 0))
+    fun getMessage(): List<ChatMessage> {
+        val messages = listOf(ChatMessage(input, 0))
         input = ""
         return messages
     }
 
     /** 模拟拉取历史消息记录 */
-    fun fetchHistory(): MutableList<Message> {
-        return mutableListOf<Message>(
-            Message("Hello, I'm Tom. I'm a chatbot.", 1),
-            Message("What's your name?", 1),
-            Message("My name is Mike.", 0),
+    fun fetchHistory(): MutableList<ChatMessage> {
+        return mutableListOf<ChatMessage>(
+            ChatMessage("Hello, I'm Tom. I'm a chatbot.", 1),
+            ChatMessage("What's your name?", 1),
+            ChatMessage("My name is Mike.", 0),
         )
     }
 }
