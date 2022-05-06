@@ -40,6 +40,12 @@ android {
         jvmTarget = '1.8'
     }
     buildFeatures.dataBinding = true
+
+    applicationVariants.all {
+        it.outputs.each { output ->
+            output.outputFileName = "${rootProject.name}.apk"
+        }
+    }
 }
 
 dependencies {

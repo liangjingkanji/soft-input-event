@@ -1,6 +1,6 @@
 <p align="center"><strong>Android软键盘最佳解决方案</strong></p>
 
-<p align="center"><a href="https://raw.githubusercontent.com/liangjingkanji/soft-input-event/master/app/release/app-release.apk?token=GHSAT0AAAAAABSGBTVJJ3PAGU2Q3KY57TAGYTUEECQ">下载体验</a>
+<p align="center"><a href="https://raw.githubusercontent.com/liangjingkanji/soft-input-event/master/app/release/soft-input-event.apk?token=GHSAT0AAAAAABSGBTVJJ3PAGU2Q3KY57TAGYTUEECQ">下载体验</a>
 </p>
 
 <p align="center">
@@ -13,7 +13,7 @@
 
 <p align="center"><img src="https://user-images.githubusercontent.com/21078112/167005905-16698ff2-8893-47d7-85a2-7f1ed248ef63.gif" align="center" width="30%;" /></p>
 
-不同于其他同类型框架, 本框架使用AndroidQ推出的新功能`WindowInsets`来解决软键盘相关问题, 具备软键盘平滑过渡动画, 提供更准确的软键盘Api以及软键盘遮挡解决方案
+不同于其他同类型框架, 本框架使用AndroidQ推出的新功能`WindowInsets`来解决软键盘相关问题, 具备软键盘平滑过渡动画(部分机型可能不支持), 提供更准确的软键盘Api以及软键盘遮挡解决方案
 
 
 <br>

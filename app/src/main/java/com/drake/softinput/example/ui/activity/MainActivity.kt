@@ -56,7 +56,8 @@ class MainActivity : BaseMenuActivity<ActivityMainBinding>(R.layout.activity_mai
     override fun onClick(v: View) {
         when (v) {
             binding.btnSend -> {
-                binding.rv.addModels(model.getMessage())
+                binding.rv.addModels(model.getMessage()) // 添加一条消息
+                binding.rv.smoothScrollToPosition(binding.rv.adapter!!.itemCount - 1) // 保证最新一条消息显示
             }
             binding.rv -> {
                 hideSoftInput()
