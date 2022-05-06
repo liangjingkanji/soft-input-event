@@ -242,6 +242,7 @@ private fun Window.setWindowSoftInputCompatible(
     margin: Int = 0,
     onChanged: (() -> Unit)? = null,
 ) {
+    setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
     var shown = false
     var matchEditText = false
     decorView.viewTreeObserver.addOnGlobalLayoutListener {
