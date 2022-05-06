@@ -58,6 +58,8 @@ fun Activity.setWindowSoftInput(
 ) = window.setWindowSoftInput(float, transition, editText, margin, 0, onChanged)
 
 /**
+ * 如果Fragment不是立即创建, 请为Fragment所在的Activity配置[[WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING]]
+ *
  * 软键盘弹出后要求指定视图[float]悬浮在软键盘之上
  * 本方法重复调用会互相覆盖, 例如Fragment调用会覆盖其Activity的调用
  *
@@ -75,7 +77,7 @@ fun Activity.setWindowSoftInput(
 @JvmOverloads
 fun Fragment.setWindowSoftInput(
     float: View? = null,
-    transition: View? = view,
+    transition: View? = float?.parent as? View,
     editText: EditText? = null,
     margin: Int = 0,
     onChanged: (() -> Unit)? = null,

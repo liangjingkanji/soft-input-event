@@ -8,6 +8,7 @@ import com.drake.softinput.showSoftInput
 
 class LoginFragment : EngineFragment<FragmentLoginBinding>(R.layout.fragment_login) {
     override fun initView() {
+        // 如果Fragment不是立即创建, 请为Fragment所在的Activity配置[[WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING]]
         setWindowSoftInput(binding.btnLogin, binding.root)
     }
 
