@@ -31,6 +31,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlin.math.min
 
 
 /**
@@ -55,7 +56,7 @@ fun Activity.setWindowSoftInput(
     editText: EditText? = null,
     margin: Int = 0,
     onChanged: (() -> Unit)? = null,
-) = window.setWindowSoftInput(float, transition, editText, margin, 0, onChanged)
+) = window.setWindowSoftInput(float, transition, editText, margin, onChanged)
 
 /**
  * 如果Fragment不是立即创建, 请为Fragment所在的Activity配置[[WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING]]
@@ -77,11 +78,11 @@ fun Activity.setWindowSoftInput(
 @JvmOverloads
 fun Fragment.setWindowSoftInput(
     float: View? = null,
-    transition: View? = float?.parent as? View,
+    transition: View? = view,
     editText: EditText? = null,
     margin: Int = 0,
     onChanged: (() -> Unit)? = null,
-) = requireActivity().window.setWindowSoftInput(float, transition, editText, margin, 0, onChanged)
+) = requireActivity().window.setWindowSoftInput(float, transition, editText, margin, onChanged)
 
 /**
  * 软键盘弹出后要求指定视图[float]悬浮在软键盘之上
@@ -105,7 +106,7 @@ fun DialogFragment.setWindowSoftInput(
     editText: EditText? = null,
     margin: Int = 0,
     onChanged: (() -> Unit)? = null,
-) = dialog?.window?.setWindowSoftInput(float, transition, editText, margin, 200, onChanged)
+) = dialog?.window?.setWindowSoftInput(float, transition, editText, margin, onChanged)
 
 /**
  * 软键盘弹出后要求指定视图[float]悬浮在软键盘之上
@@ -129,7 +130,7 @@ fun BottomSheetDialogFragment.setWindowSoftInput(
     editText: EditText? = null,
     margin: Int = 0,
     onChanged: (() -> Unit)? = null,
-) = dialog?.window?.setWindowSoftInput(float, transition, editText, margin, 0, onChanged)
+) = dialog?.window?.setWindowSoftInput(float, transition, editText, margin, onChanged)
 
 /**
  * 软键盘弹出后要求指定视图[float]悬浮在软键盘之上
@@ -153,7 +154,7 @@ fun Dialog.setWindowSoftInput(
     editText: EditText? = null,
     margin: Int = 0,
     onChanged: (() -> Unit)? = null,
-) = window?.setWindowSoftInput(float, transition, editText, margin, 200, onChanged)
+) = window?.setWindowSoftInput(float, transition, editText, margin, onChanged)
 
 /**
  * 软键盘弹出后要求指定视图[float]悬浮在软键盘之上
@@ -166,7 +167,7 @@ fun Dialog.setWindowSoftInput(
  * @param transition 当软键盘显示隐藏时需要移动的视图, 使用[View.setTranslationY]移动
  * @param editText 需要监听的EditText, 默认监听所有EditText
  * @param margin 悬浮视图和软键盘间距
- * @param delay 等待一定时间后才调整悬浮视图, 对话框如果不指定该参数会出现闪屏
+ * @param isDialog 等待一定时间后才调整悬浮视图, 对话框如果不指定该参数会出现闪屏
  * @param onChanged 监听软键盘是否显示
  *
  * @see getSoftInputHeight 软键盘高度
@@ -177,7 +178,6 @@ fun Window.setWindowSoftInput(
     transition: View? = null,
     editText: EditText? = null,
     margin: Int = 0,
-    delay: Long = 200,
     onChanged: (() -> Unit)? = null,
 ) {
     // Api21下不需要用户体验, 直接不适配
@@ -187,8 +187,11 @@ fun Window.setWindowSoftInput(
         return setWindowSoftInputCompatible(float, transition, editText, margin, onChanged)
     }
     setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
-    var viewGap = 0
     var matchEditText = false
+    var hasSoftInput = false
+    var floatInitialBottom = 0
+    var startAnimation: WindowInsetsAnimationCompat? = null
+    var transitionY = 0f
     val callback = object : WindowInsetsAnimationCompat.Callback(DISPATCH_MODE_CONTINUE_ON_SUBTREE) {
 
         override fun onStart(
@@ -196,16 +199,15 @@ fun Window.setWindowSoftInput(
             bounds: WindowInsetsAnimationCompat.BoundsCompat
         ): WindowInsetsAnimationCompat.BoundsCompat {
             if (float == null || transition == null) return bounds
-            val hasSoftInput = ViewCompat.getRootWindowInsets(decorView)?.isVisible(WindowInsetsCompat.Type.ime()) ?: false
+            hasSoftInput = ViewCompat.getRootWindowInsets(decorView)?.isVisible(WindowInsetsCompat.Type.ime()) ?: false
+            startAnimation = animation
             if (hasSoftInput) matchEditText = editText == null || editText.hasFocus()
-            viewGap = run {
-                val r = IntArray(2)
-                transition.getLocationInWindow(r)
-                r[1] + transition.height
-            } - run {
-                val r = IntArray(2)
-                float.getLocationInWindow(r)
-                r[1] + float.height
+            if (hasSoftInput) {
+                floatInitialBottom = run {
+                    val r = IntArray(2)
+                    float.getLocationInWindow(r)
+                    r[1] + float.height
+                }
             }
             return bounds
         }
@@ -219,16 +221,16 @@ fun Window.setWindowSoftInput(
             insets: WindowInsetsCompat,
             runningAnimations: MutableList<WindowInsetsAnimationCompat>
         ): WindowInsetsCompat {
-            if (transition == null || !matchEditText) return insets
-            val navigationBarsHeight = insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom
+            val fraction = startAnimation?.fraction
+            if (fraction == null || float == null || transition == null || !matchEditText) return insets
             val softInputHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom
-            if (softInputHeight > navigationBarsHeight + viewGap) {
-                val offset = (-(softInputHeight - viewGap - navigationBarsHeight) - margin).toFloat()
-                if (delay > 0) {
-                    transition.animate().setDuration(delay).translationY(offset)
-                } else {
-                    transition.translationY = offset
-                }
+            val softInputTop = decorView.bottom - softInputHeight
+            val offset = (softInputTop - floatInitialBottom - margin).toFloat()
+            if (hasSoftInput && softInputTop < floatInitialBottom) {
+                transition.translationY = offset
+                transitionY = transition.translationY
+            } else if (!hasSoftInput) {
+                transition.translationY = min(transitionY - transitionY * (fraction + 0.5f), 0f)
             }
             return insets
         }
