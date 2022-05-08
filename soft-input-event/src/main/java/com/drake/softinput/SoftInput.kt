@@ -24,7 +24,6 @@ import android.os.Build
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
-import android.widget.EditText
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsAnimationCompat
 import androidx.core.view.WindowInsetsCompat
@@ -43,7 +42,7 @@ import kotlin.math.min
  *
  * @param float 需要悬浮在软键盘之上的视图
  * @param transition 当软键盘显示隐藏时需要移动的视图, 使用[View.setTranslationY]移动
- * @param editText 需要监听的EditText, 默认监听所有EditText
+ * @param editText 指定的视图存在焦点才触发软键盘监听, null则全部视图都触发
  * @param margin 悬浮视图和软键盘间距
  * @param onChanged 监听软键盘是否显示
  *
@@ -53,7 +52,7 @@ import kotlin.math.min
 fun Activity.setWindowSoftInput(
     float: View? = null,
     transition: View? = float?.parent as? View,
-    editText: EditText? = null,
+    editText: View? = null,
     margin: Int = 0,
     onChanged: (() -> Unit)? = null,
 ) = window.setWindowSoftInput(float, transition, editText, margin, onChanged)
@@ -69,7 +68,7 @@ fun Activity.setWindowSoftInput(
  *
  * @param float 需要悬浮在软键盘之上的视图
  * @param transition 当软键盘显示隐藏时需要移动的视图, 使用[View.setTranslationY]移动
- * @param editText 需要监听的EditText, 默认监听所有EditText
+ * @param editText 指定的视图存在焦点才触发软键盘监听, null则全部视图都触发
  * @param margin 悬浮视图和软键盘间距
  * @param onChanged 监听软键盘是否显示
  *
@@ -79,7 +78,7 @@ fun Activity.setWindowSoftInput(
 fun Fragment.setWindowSoftInput(
     float: View? = null,
     transition: View? = view,
-    editText: EditText? = null,
+    editText: View? = null,
     margin: Int = 0,
     onChanged: (() -> Unit)? = null,
 ) = requireActivity().window.setWindowSoftInput(float, transition, editText, margin, onChanged)
@@ -93,7 +92,7 @@ fun Fragment.setWindowSoftInput(
  *
  * @param float 需要悬浮在软键盘之上的视图
  * @param transition 当软键盘显示隐藏时需要移动的视图, 使用[View.setTranslationY]移动
- * @param editText 需要监听的EditText, 默认监听所有EditText
+ * @param editText 指定的视图存在焦点才触发软键盘监听, null则全部视图都触发
  * @param margin 悬浮视图和软键盘间距
  * @param onChanged 监听软键盘是否显示
  *
@@ -103,7 +102,7 @@ fun Fragment.setWindowSoftInput(
 fun DialogFragment.setWindowSoftInput(
     float: View? = null,
     transition: View? = view,
-    editText: EditText? = null,
+    editText: View? = null,
     margin: Int = 0,
     onChanged: (() -> Unit)? = null,
 ) = dialog?.window?.setWindowSoftInput(float, transition, editText, margin, onChanged)
@@ -117,7 +116,7 @@ fun DialogFragment.setWindowSoftInput(
  *
  * @param float 需要悬浮在软键盘之上的视图
  * @param transition 当软键盘显示隐藏时需要移动的视图, 使用[View.setTranslationY]移动
- * @param editText 需要监听的EditText, 默认监听所有EditText
+ * @param editText 指定的视图存在焦点才触发软键盘监听, null则全部视图都触发
  * @param margin 悬浮视图和软键盘间距
  * @param onChanged 监听软键盘是否显示
  *
@@ -127,7 +126,7 @@ fun DialogFragment.setWindowSoftInput(
 fun BottomSheetDialogFragment.setWindowSoftInput(
     float: View? = null,
     transition: View? = dialog?.findViewById(com.google.android.material.R.id.design_bottom_sheet),
-    editText: EditText? = null,
+    editText: View? = null,
     margin: Int = 0,
     onChanged: (() -> Unit)? = null,
 ) = dialog?.window?.setWindowSoftInput(float, transition, editText, margin, onChanged)
@@ -141,7 +140,7 @@ fun BottomSheetDialogFragment.setWindowSoftInput(
  *
  * @param float 需要悬浮在软键盘之上的视图
  * @param transition 当软键盘显示隐藏时需要移动的视图, 使用[View.setTranslationY]移动
- * @param editText 需要监听的EditText, 默认监听所有EditText
+ * @param editText 指定的视图存在焦点才触发软键盘监听, null则全部视图都触发
  * @param margin 悬浮视图和软键盘间距
  * @param onChanged 监听软键盘是否显示
  *
@@ -151,7 +150,7 @@ fun BottomSheetDialogFragment.setWindowSoftInput(
 fun Dialog.setWindowSoftInput(
     float: View? = null,
     transition: View? = window?.decorView,
-    editText: EditText? = null,
+    editText: View? = null,
     margin: Int = 0,
     onChanged: (() -> Unit)? = null,
 ) = window?.setWindowSoftInput(float, transition, editText, margin, onChanged)
@@ -165,9 +164,8 @@ fun Dialog.setWindowSoftInput(
  *
  * @param float 需要悬浮在软键盘之上的视图
  * @param transition 当软键盘显示隐藏时需要移动的视图, 使用[View.setTranslationY]移动
- * @param editText 需要监听的EditText, 默认监听所有EditText
+ * @param editText 指定的视图存在焦点才触发软键盘监听, null则全部视图都触发
  * @param margin 悬浮视图和软键盘间距
- * @param isDialog 等待一定时间后才调整悬浮视图, 对话框如果不指定该参数会出现闪屏
  * @param onChanged 监听软键盘是否显示
  *
  * @see getSoftInputHeight 软键盘高度
@@ -176,7 +174,7 @@ fun Dialog.setWindowSoftInput(
 fun Window.setWindowSoftInput(
     float: View? = null,
     transition: View? = null,
-    editText: EditText? = null,
+    editText: View? = null,
     margin: Int = 0,
     onChanged: (() -> Unit)? = null,
 ) {
@@ -242,7 +240,7 @@ fun Window.setWindowSoftInput(
 private fun Window.setWindowSoftInputCompatible(
     float: View? = null,
     transition: View? = float?.parent as? View,
-    editText: EditText? = null,
+    editText: View? = null,
     margin: Int = 0,
     onChanged: (() -> Unit)? = null,
 ) {
