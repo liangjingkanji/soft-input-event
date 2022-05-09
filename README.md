@@ -79,7 +79,7 @@ dependencyResolutionManagement {
 然后在 module 的 build.gradle 添加依赖框架
 
 ```groovy
-implementation 'com.github.liangjingkanji:soft-input-event:1.0.4'
+implementation 'com.github.liangjingkanji:soft-input-event:1.0.5'
 ```
 
 
