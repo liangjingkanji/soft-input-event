@@ -13,7 +13,7 @@
 
 <p align="center"><img src="https://user-images.githubusercontent.com/21078112/167005905-16698ff2-8893-47d7-85a2-7f1ed248ef63.gif" align="center" width="30%;" /></p>
 
-不同于其他同类型框架, 本框架使用Android11推出的新功能`WindowInsets`来解决软键盘相关问题, 具备软键盘平滑过渡动画(部分机型可能不支持), 提供更准确的软键盘Api以及软键盘遮挡解决方案
+不同于其他同类型框架, 本框架使用Android11推出的新功能`WindowInsetsAnimation`来解决软键盘相关问题, 具备软键盘平滑过渡动画(部分机型可能不支持), 提供更准确的软键盘Api以及软键盘遮挡解决方案
 
 
 <br>
@@ -27,11 +27,14 @@
 - [x] 更准确的软键盘高度/显示隐藏监听
 - [x] 指定监听输入框
 - [x] 显示/隐藏软键盘
+- [x] 支持对话框
 - [x] 更简单易用的方法
 
 ## 使用
 
 监听键盘显示或者指定视图悬浮于软键盘上只需要一个方法
+
+本方法支持`Activity/Fragment/Dialog/DialogFragment/BottomSheetDialogFragment`
 
 ```kotlin
 setWindowSoftInput(
