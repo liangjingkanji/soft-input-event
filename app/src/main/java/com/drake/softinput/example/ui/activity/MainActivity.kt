@@ -27,6 +27,7 @@ class MainActivity : BaseMenuActivity<ActivityMainBinding>(R.layout.activity_mai
 
         setWindowSoftInput(
             float = binding.llInput,
+            setPadding = true,
             onChanged = {
                 Log.d("SoftInput", "visibility = ${hasSoftInput()}")
             }
@@ -57,7 +58,7 @@ class MainActivity : BaseMenuActivity<ActivityMainBinding>(R.layout.activity_mai
         when (v) {
             binding.btnSend -> {
                 binding.rv.addModels(model.getMessages()) // 添加一条消息
-                binding.rv.smoothScrollToPosition(binding.rv.adapter!!.itemCount - 1) // 保证最新一条消息显示
+                binding.rv.scrollToPosition(binding.rv.adapter!!.itemCount - 1) // 保证最新一条消息显示
             }
             binding.rv -> {
                 hideSoftInput()

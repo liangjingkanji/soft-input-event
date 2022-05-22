@@ -30,6 +30,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlin.math.max
 import kotlin.math.min
 
 
@@ -44,6 +45,7 @@ import kotlin.math.min
  * @param transition 当软键盘显示隐藏时需要移动的视图, 使用[View.setTranslationY]移动
  * @param editText 指定的视图存在焦点才触发软键盘监听, null则全部视图都触发
  * @param margin 悬浮视图和软键盘间距
+ * @param setPadding 使用[View.setPadding]来移动[transition]视图, 让可滚动视图自动收缩, 而不是向上偏移[View.setTranslationY]
  * @param onChanged 监听软键盘是否显示
  *
  * @see getSoftInputHeight 软键盘高度
@@ -54,8 +56,9 @@ fun Activity.setWindowSoftInput(
     transition: View? = float?.parent as? View,
     editText: View? = null,
     margin: Int = 0,
+    setPadding: Boolean = false,
     onChanged: (() -> Unit)? = null,
-) = window.setWindowSoftInput(float, transition, editText, margin, onChanged)
+) = window.setWindowSoftInput(float, transition, editText, margin, setPadding, onChanged)
 
 /**
  * 如果Fragment不是立即创建, 请为Fragment所在的Activity配置[[WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING]]
@@ -70,6 +73,7 @@ fun Activity.setWindowSoftInput(
  * @param transition 当软键盘显示隐藏时需要移动的视图, 使用[View.setTranslationY]移动
  * @param editText 指定的视图存在焦点才触发软键盘监听, null则全部视图都触发
  * @param margin 悬浮视图和软键盘间距
+ * @param setPadding 使用[View.setPadding]来移动[transition]视图, 让可滚动视图自动收缩, 而不是向上偏移[View.setTranslationY]
  * @param onChanged 监听软键盘是否显示
  *
  * @see getSoftInputHeight 软键盘高度
@@ -80,8 +84,9 @@ fun Fragment.setWindowSoftInput(
     transition: View? = view,
     editText: View? = null,
     margin: Int = 0,
+    setPadding: Boolean = false,
     onChanged: (() -> Unit)? = null,
-) = requireActivity().window.setWindowSoftInput(float, transition, editText, margin, onChanged)
+) = requireActivity().window.setWindowSoftInput(float, transition, editText, margin, setPadding, onChanged)
 
 /**
  * 软键盘弹出后要求指定视图[float]悬浮在软键盘之上
@@ -94,6 +99,7 @@ fun Fragment.setWindowSoftInput(
  * @param transition 当软键盘显示隐藏时需要移动的视图, 使用[View.setTranslationY]移动
  * @param editText 指定的视图存在焦点才触发软键盘监听, null则全部视图都触发
  * @param margin 悬浮视图和软键盘间距
+ * @param setPadding 使用[View.setPadding]来移动[transition]视图, 让可滚动视图自动收缩, 而不是向上偏移[View.setTranslationY]
  * @param onChanged 监听软键盘是否显示
  *
  * @see getSoftInputHeight 软键盘高度
@@ -104,8 +110,9 @@ fun DialogFragment.setWindowSoftInput(
     transition: View? = view,
     editText: View? = null,
     margin: Int = 0,
+    setPadding: Boolean = false,
     onChanged: (() -> Unit)? = null,
-) = dialog?.window?.setWindowSoftInput(float, transition, editText, margin, onChanged)
+) = dialog?.window?.setWindowSoftInput(float, transition, editText, margin, setPadding, onChanged)
 
 /**
  * 软键盘弹出后要求指定视图[float]悬浮在软键盘之上
@@ -118,6 +125,7 @@ fun DialogFragment.setWindowSoftInput(
  * @param transition 当软键盘显示隐藏时需要移动的视图, 使用[View.setTranslationY]移动
  * @param editText 指定的视图存在焦点才触发软键盘监听, null则全部视图都触发
  * @param margin 悬浮视图和软键盘间距
+ * @param setPadding 使用[View.setPadding]来移动[transition]视图, 让可滚动视图自动收缩, 而不是向上偏移[View.setTranslationY]
  * @param onChanged 监听软键盘是否显示
  *
  * @see getSoftInputHeight 软键盘高度
@@ -128,8 +136,9 @@ fun BottomSheetDialogFragment.setWindowSoftInput(
     transition: View? = dialog?.findViewById(com.google.android.material.R.id.design_bottom_sheet),
     editText: View? = null,
     margin: Int = 0,
+    setPadding: Boolean = false,
     onChanged: (() -> Unit)? = null,
-) = dialog?.window?.setWindowSoftInput(float, transition, editText, margin, onChanged)
+) = dialog?.window?.setWindowSoftInput(float, transition, editText, margin, setPadding, onChanged)
 
 /**
  * 软键盘弹出后要求指定视图[float]悬浮在软键盘之上
@@ -142,6 +151,7 @@ fun BottomSheetDialogFragment.setWindowSoftInput(
  * @param transition 当软键盘显示隐藏时需要移动的视图, 使用[View.setTranslationY]移动
  * @param editText 指定的视图存在焦点才触发软键盘监听, null则全部视图都触发
  * @param margin 悬浮视图和软键盘间距
+ * @param setPadding 使用[View.setPadding]来移动[transition]视图, 让可滚动视图自动收缩, 而不是向上偏移[View.setTranslationY]
  * @param onChanged 监听软键盘是否显示
  *
  * @see getSoftInputHeight 软键盘高度
@@ -152,8 +162,9 @@ fun Dialog.setWindowSoftInput(
     transition: View? = window?.decorView,
     editText: View? = null,
     margin: Int = 0,
+    setPadding: Boolean = false,
     onChanged: (() -> Unit)? = null,
-) = window?.setWindowSoftInput(float, transition, editText, margin, onChanged)
+) = window?.setWindowSoftInput(float, transition, editText, margin, setPadding, onChanged)
 
 /**
  * 软键盘弹出后要求指定视图[float]悬浮在软键盘之上
@@ -166,6 +177,7 @@ fun Dialog.setWindowSoftInput(
  * @param transition 当软键盘显示隐藏时需要移动的视图, 使用[View.setTranslationY]移动
  * @param editText 指定的视图存在焦点才触发软键盘监听, null则全部视图都触发
  * @param margin 悬浮视图和软键盘间距
+ * @param setPadding 使用[View.setPadding]来移动[transition]视图, 让可滚动视图自动收缩, 而不是向上偏移[View.setTranslationY]
  * @param onChanged 监听软键盘是否显示
  *
  * @see getSoftInputHeight 软键盘高度
@@ -176,6 +188,7 @@ fun Window.setWindowSoftInput(
     transition: View? = null,
     editText: View? = null,
     margin: Int = 0,
+    setPadding: Boolean = false,
     onChanged: (() -> Unit)? = null,
 ) {
     // Api21下不需要用户体验, 直接不适配
@@ -223,12 +236,21 @@ fun Window.setWindowSoftInput(
             if (fraction == null || float == null || transition == null || !matchEditText) return insets
             val softInputHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom
             val softInputTop = decorView.bottom - softInputHeight
-            val offset = (softInputTop - floatInitialBottom - margin).toFloat()
             if (hasSoftInput && softInputTop < floatInitialBottom) {
-                transition.translationY = offset
-                transitionY = transition.translationY
+                val offset = (softInputTop - floatInitialBottom - margin).toFloat()
+                if (setPadding) {
+                    transition.setPadding(0, 0, 0, -offset.toInt())
+                    transitionY = -offset
+                } else {
+                    transition.translationY = offset
+                    transitionY = offset
+                }
             } else if (!hasSoftInput) {
-                transition.translationY = min(transitionY - transitionY * (fraction + 0.5f), 0f)
+                if (setPadding) {
+                    transition.setPadding(0, 0, 0, max((transitionY - transitionY * (fraction + 0.5f)), 0f).toInt())
+                } else {
+                    transition.translationY = min(transitionY - transitionY * (fraction + 0.5f), 0f)
+                }
             }
             return insets
         }
