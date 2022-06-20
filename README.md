@@ -1,6 +1,6 @@
 <p align="center"><strong>Android软键盘最佳解决方案</strong></p>
 
-<p align="center"><a href="https://github.com/liangjingkanji/soft-input-event/releases/download/1.0.6/soft-input-event.apk">下载体验</a>
+<p align="center"><a href="https://github.com/liangjingkanji/soft-input-event/releases/download/1.0.7/soft-input-event.apk">下载体验</a>
 </p>
 
 <p align="center">
@@ -84,7 +84,7 @@ dependencyResolutionManagement {
 然后在 module 的 build.gradle 添加依赖框架
 
 ```groovy
-implementation 'com.github.liangjingkanji:soft-input-event:1.0.6'
+implementation 'com.github.liangjingkanji:soft-input-event:1.0.7'
 ```
 
 
