@@ -298,17 +298,10 @@ private fun Window.setWindowSoftInputCompatible(
     }
 }
 
-
-private var isSupportInsetsFiled: Boolean? = null
-
 /** 判断系统是否支持[WindowInsetsAnimationCompat] */
-fun View.isSystemInsetsAnimationSupport(): Boolean {
-    var supportInsets = isSupportInsetsFiled
-    if (supportInsets == null) {
-        supportInsets = ViewCompat.getWindowInsetsController(this) != null
-        isSupportInsetsFiled = supportInsets
-    }
-    return supportInsets
+internal fun View.isSystemInsetsAnimationSupport(): Boolean {
+    val windowInsetsController = ViewCompat.getWindowInsetsController(this)
+    return !(windowInsetsController == null || windowInsetsController.systemBarsBehavior == 0)
 }
 
 
