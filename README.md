@@ -11,7 +11,7 @@
 </p>
 <br>
 
-<p align="center"><img src="https://user-images.githubusercontent.com/21078112/167005905-16698ff2-8893-47d7-85a2-7f1ed248ef63.gif" align="center" width="30%;" /></p>
+<p align="center"><img src="https://user-images.githubusercontent.com/21078112/167005905-16698ff2-8893-47d7-85a2-7f1ed248ef63.gif" align="center" width="30%" /></p>
 
 不同于其他同类型框架, 本框架使用Android11推出的新功能`WindowInsetsAnimation`来解决软键盘相关问题, 具备软键盘平滑过渡动画(部分机型可能不支持), 提供更准确的软键盘Api以及软键盘遮挡解决方案
 
