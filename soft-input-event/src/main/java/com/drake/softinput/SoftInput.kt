@@ -24,15 +24,31 @@ import android.os.Build
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
+import androidx.activity.ComponentActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsAnimationCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlin.math.max
 import kotlin.math.min
 
+
+object SoftInput {
+    /** 当[Lifecycle.Event.ON_STOP]时隐藏键盘 */
+    internal val hideSoftInputObserver = LifecycleEventObserver { source, event ->
+        if (event == Lifecycle.Event.ON_PAUSE) {
+            if (source is Activity) {
+                source.hideSoftInput()
+            } else if (source is Fragment) {
+                source.hideSoftInput()
+            }
+        }
+    }
+}
 
 /**
  * 软键盘弹出后要求指定视图[float]悬浮在软键盘之上
@@ -58,7 +74,12 @@ fun Activity.setWindowSoftInput(
     margin: Int = 0,
     setPadding: Boolean = false,
     onChanged: (() -> Unit)? = null,
-) = window.setWindowSoftInput(float, transition, editText, margin, setPadding, onChanged)
+) {
+    if (this is ComponentActivity) {
+        lifecycle.addObserver(SoftInput.hideSoftInputObserver)
+    }
+    window.setWindowSoftInput(float, transition, editText, margin, setPadding, onChanged)
+}
 
 /**
  * 如果Fragment不是立即创建, 请为Fragment所在的Activity配置[[WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING]]
@@ -86,7 +107,10 @@ fun Fragment.setWindowSoftInput(
     margin: Int = 0,
     setPadding: Boolean = false,
     onChanged: (() -> Unit)? = null,
-) = requireActivity().window.setWindowSoftInput(float, transition, editText, margin, setPadding, onChanged)
+) {
+    lifecycle.addObserver(SoftInput.hideSoftInputObserver)
+    requireActivity().window.setWindowSoftInput(float, transition, editText, margin, setPadding, onChanged)
+}
 
 /**
  * 软键盘弹出后要求指定视图[float]悬浮在软键盘之上
@@ -112,7 +136,10 @@ fun DialogFragment.setWindowSoftInput(
     margin: Int = 0,
     setPadding: Boolean = false,
     onChanged: (() -> Unit)? = null,
-) = dialog?.window?.setWindowSoftInput(float, transition, editText, margin, setPadding, onChanged)
+) {
+    lifecycle.addObserver(SoftInput.hideSoftInputObserver)
+    dialog?.window?.setWindowSoftInput(float, transition, editText, margin, setPadding, onChanged)
+}
 
 /**
  * 软键盘弹出后要求指定视图[float]悬浮在软键盘之上
@@ -138,7 +165,10 @@ fun BottomSheetDialogFragment.setWindowSoftInput(
     margin: Int = 0,
     setPadding: Boolean = false,
     onChanged: (() -> Unit)? = null,
-) = dialog?.window?.setWindowSoftInput(float, transition, editText, margin, setPadding, onChanged)
+) {
+    lifecycle.addObserver(SoftInput.hideSoftInputObserver)
+    dialog?.window?.setWindowSoftInput(float, transition, editText, margin, setPadding, onChanged)
+}
 
 /**
  * 软键盘弹出后要求指定视图[float]悬浮在软键盘之上
