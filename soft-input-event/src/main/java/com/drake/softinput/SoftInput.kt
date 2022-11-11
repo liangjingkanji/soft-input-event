@@ -44,6 +44,9 @@ object SoftInput {
             source.hideSoftInput()
         }
     }
+
+    /** 强制开启兼容模式, 即关闭键盘动画 */
+    var isSoftInputCompatMode = false
 }
 
 /**
@@ -211,7 +214,7 @@ fun Window.setWindowSoftInput(
     // Api21下不需要用户体验, 直接不适配
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) return
     // 部分系统不支持WindowInsets使用兼容方案处理
-    if (!decorView.isSystemInsetsAnimationSupport()) {
+    if (!decorView.isSystemInsetsAnimationSupport() || SoftInput.isSoftInputCompatMode) {
         return setWindowSoftInputCompatible(float, transition, editText, margin, onChanged)
     }
     setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
