@@ -31,6 +31,7 @@
             android:textColor="@color/white"
             android:textIsSelectable="true"
             android:textSize="12dp"
+            android:layerType="software"
             app:layout_constrainedWidth="true"
             app:layout_constraintHorizontal_bias="1"
             app:layout_constraintLeft_toLeftOf="parent"
