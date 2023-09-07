@@ -1,6 +1,8 @@
 <p align="center"><strong>Android软键盘最佳解决方案</strong></p>
 
-<p align="center"><a href="https://github.com/liangjingkanji/soft-input-event/releases/download/1.0.9/soft-input-event.apk">下载体验</a>
+<p align="center">
+<a href="https://github.com/liangjingkanji/soft-input-event/releases/download/1.0.9/soft-input-event.apk">下载体验</a>
+| <a href="https://github.com/liangjingkanji/soft-input-event/discussions/9">兼容问题</a>
 </p>
 
 <p align="center">
@@ -57,20 +59,7 @@ setWindowSoftInput(
 
 ## 安装
 
-添加远程仓库根据创建项目的 Android Studio 版本有所不同
-
-Android Studio Arctic Fox以下创建的项目 在项目根目录的 build.gradle 添加仓库
-
-```groovy
-allprojects {
-    repositories {
-        // ...
-        maven { url 'https://jitpack.io' }
-    }
-}
-```
-
-Android Studio Arctic Fox以上创建的项目 在项目根目录的 settings.gradle 添加仓库
+Project 的 settings.gradle 添加仓库
 
 ```kotlin
 dependencyResolutionManagement {
@@ -81,10 +70,12 @@ dependencyResolutionManagement {
 }
 ```
 
-然后在 module 的 build.gradle 添加依赖框架
+Module 的 build.gradle 添加依赖框架
 
 ```groovy
-implementation 'com.github.liangjingkanji:soft-input-event:1.0.9'
+dependencies {
+    implementation 'com.github.liangjingkanji:soft-input-event:1.0.9'
+}
 ```
 
 
